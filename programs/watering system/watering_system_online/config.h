@@ -39,8 +39,8 @@ unsigned long previousTime = 0;
 //adafruit config
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
-#define AIO_USERNAME    "Azzar"
-#define AIO_KEY         "aio_THCz74XRMp9B7dLQCLZll9yu8chV"
+#define AIO_USERNAME    "your_aio_username"
+#define AIO_KEY         "your_aio_key"
 
 //Set up the adafruit mqtt client
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
