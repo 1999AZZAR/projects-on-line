@@ -1,0 +1,5 @@
+1. flash your arduino with the code given
+2. install arduino and lcd as shown in the schematic
+3. run the program monitor.exe
+4. enter the arduino port that is read on the pc in the program
+5. done
