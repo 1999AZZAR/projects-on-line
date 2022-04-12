@@ -16,7 +16,7 @@ void setup() {
 void loop() {
 
   sensorValue = analogRead(A0);
-  byte mappedValue = map(sensorValue, 0, 1024, 250, 5000);
+  byte mappedValue = map(sensorValue, 0, 1024, 250, 2000) * 120;
 
   if (digitalRead(push) == HIGH) {
     digitalWrite(Relay1, LOW);
@@ -36,3 +36,4 @@ void loop() {
     digitalWrite(Relay1, HIGH);
   }
 }
+
