@@ -135,7 +135,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 12
@@ -152,7 +152,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 10
@@ -177,7 +177,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 12
@@ -195,7 +195,7 @@
 // ===== DISPLAY ===== //
   #define SSD1306_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "custome Hardware"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 14
@@ -213,7 +213,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 12
@@ -230,7 +230,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 12
@@ -249,7 +249,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
   #define RTC_DS3231
 
@@ -277,7 +277,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
 // ===== BUTTONS ===== //
   #define BUTTON_UP 12
@@ -296,7 +296,7 @@
 // ===== DISPLAY ===== //
   #define SH1106_I2C
   #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Hardware by DSTIKE"
+  #define DISPLAY_TEXT "Custom Hardware"
 
   #define RTC_DS3231
 
@@ -363,12 +363,12 @@
 #endif /* ifndef ATTACK_ALL_CH */
 
 #ifndef AUTOSAVE_TIME
-  #define AUTOSAVE_TIME 60
+  #define AUTOSAVE_TIME 30
 #endif /* ifndef ATTACK_ALL_CH */
 
 // ===== ATTACK ===== //
 #ifndef ATTACK_ALL_CH
-  #define ATTACK_ALL_CH false
+  #define ATTACK_ALL_CH true
 #endif /* ifndef ATTACK_ALL_CH */
 
 #ifndef RANDOM_TX
@@ -392,16 +392,16 @@
 #endif /* ifndef BEACON_INTERVAL_100MS */
 
 #ifndef PROBE_FRAMES_PER_SSID
-  #define PROBE_FRAMES_PER_SSID 1
+  #define PROBE_FRAMES_PER_SSID 15
 #endif /* ifndef PROBE_FRAMES_PER_SSID */
 
 // ===== SNIFFER ===== //
 #ifndef CH_TIME
-  #define CH_TIME 200
+  #define CH_TIME 384
 #endif /* ifndef CH_TIME */
 
 #ifndef MIN_DEAUTH_FRAMES
-  #define MIN_DEAUTH_FRAMES 3
+  #define MIN_DEAUTH_FRAMES 2
 #endif /* ifndef MIN_DEAUTH_FRAMES */
 
 #ifndef DEFAULT_SSID
@@ -502,7 +502,7 @@
 // =============== DISPLAY =============== //
 
 #ifndef DISPLAY_TIMEOUT
-  #define DISPLAY_TIMEOUT 60
+  #define DISPLAY_TIMEOUT 3600
 #endif /* ifndef DISPLAY_TIMEOUT */
 
 #ifndef DISPLAY_TEXT
