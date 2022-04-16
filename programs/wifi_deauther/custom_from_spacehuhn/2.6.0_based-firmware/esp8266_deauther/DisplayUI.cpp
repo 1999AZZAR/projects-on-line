@@ -16,7 +16,7 @@ void DisplayUI::configInit() {
      */
     display.setFont(DejaVu_Sans_Mono_12);
 
-    display.setContrast(255);
+    display.setContrast(1); //max = 255, if 0 = not usefull
 
     if (FLIP_DIPLAY) display.flipScreenVertically();
 
@@ -80,7 +80,7 @@ void DisplayUI::setup() {
 
     // MAIN MENU
     createMenu(&mainMenu, NULL, [this]() {
-        addMenuNode(&mainMenu, D_SCAN, &scanMenu);          /// SCAN
+        addMenuNode(&mainMenu, D_SCAN, &scanMenu);          // SCAN
         addMenuNode(&mainMenu, D_SHOW, &showMenu);          // SHOW
         addMenuNode(&mainMenu, D_ATTACK, &attackMenu);      // ATTACK
         addMenuNode(&mainMenu, D_PACKET_MONITOR, [this]() { // PACKET MONITOR
@@ -531,7 +531,7 @@ void DisplayUI::setupButtons() {
                 if (currentMenu->selected > 0) currentMenu->selected--;
                 else currentMenu->selected = currentMenu->list->size() - 1;
             } else if (mode == DISPLAY_MODE::PACKETMONITOR) { // when in packet monitor, change channel
-                scan.setChannel(wifi_channel + 1);
+                scan.setChannel(wifi_channel - 1);
             } else if (mode == DISPLAY_MODE::CLOCK) {         // when in clock, change time
                 setTime(clockHour, clockMinute + 1, clockSecond);
             }
@@ -547,7 +547,7 @@ void DisplayUI::setupButtons() {
                 if (currentMenu->selected > 0) currentMenu->selected--;
                 else currentMenu->selected = currentMenu->list->size() - 1;
             } else if (mode == DISPLAY_MODE::PACKETMONITOR) { // when in packet monitor, change channel
-                scan.setChannel(wifi_channel + 1);
+                scan.setChannel(wifi_channel - 1);
             } else if (mode == DISPLAY_MODE::CLOCK) {         // when in clock, change time
                 setTime(clockHour, clockMinute + 10, clockSecond);
             }
@@ -564,8 +564,8 @@ void DisplayUI::setupButtons() {
                 if (currentMenu->selected < currentMenu->list->size() - 1) currentMenu->selected++;
                 else currentMenu->selected = 0;
             } else if (mode == DISPLAY_MODE::PACKETMONITOR) { // when in packet monitor, change channel
-                scan.setChannel(wifi_channel - 1);
-            } else if (mode == DISPLAY_MODE::CLOCK) {         // when in packet monitor, change channel
+                scan.setChannel(wifi_channel + 1);
+            } else if (mode == DISPLAY_MODE::CLOCK) {         // when in clock, change time
                 setTime(clockHour, clockMinute - 1, clockSecond);
             }
         }
@@ -580,10 +580,10 @@ void DisplayUI::setupButtons() {
                 if (currentMenu->selected < currentMenu->list->size() - 1) currentMenu->selected++;
                 else currentMenu->selected = 0;
             } else if (mode == DISPLAY_MODE::PACKETMONITOR) { // when in packet monitor, change channel
-                scan.setChannel(wifi_channel - 1);
+                scan.setChannel(wifi_channel + 1);
             }
 
-            else if (mode == DISPLAY_MODE::CLOCK) { // when in packet monitor, change channel
+            else if (mode == DISPLAY_MODE::CLOCK) {           // when in clock, change time
                 setTime(clockHour, clockMinute - 10, clockSecond);
             }
         }
@@ -810,9 +810,14 @@ void DisplayUI::drawIntro() {
     drawString(2, center(str(D_INTRO_2), maxLen));
     drawString(3, center(DEAUTHER_VERSION, maxLen));
     if (scan.isScanning()) {
-        if (currentTime - startTime >= screenIntroTime+4500) drawString(4, left(str(D_SCANNING_3), maxLen));
-        else if (currentTime - startTime >= screenIntroTime+3000) drawString(4, left(str(D_SCANNING_2), maxLen));
-        else if (currentTime - startTime >= screenIntroTime+1500) drawString(4, left(str(D_SCANNING_1), maxLen));
+        if (currentTime - startTime >= screenIntroTime+2250) drawString(4, left(str(D_SCANNING_8), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+2000) drawString(4, left(str(D_SCANNING_7), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+1750) drawString(4, left(str(D_SCANNING_6), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+1500) drawString(4, left(str(D_SCANNING_5), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+1250) drawString(4, left(str(D_SCANNING_4), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+1000) drawString(4, left(str(D_SCANNING_3), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+750) drawString(4, left(str(D_SCANNING_2), maxLen));
+        else if (currentTime - startTime >= screenIntroTime+500) drawString(4, left(str(D_SCANNING_1), maxLen));
         else if (currentTime - startTime >= screenIntroTime) drawString(4, left(str(D_SCANNING_0), maxLen));
     }
 }

@@ -49,13 +49,18 @@ extern String leftRight(String a, String b, int len);
 extern String replaceUtf8(String str, String r);
 
 const char D_INTRO_0[] PROGMEM = "barebone Deauther";
-const char D_INTRO_1[] PROGMEM = "cr: @Spacehuhn";
+const char D_INTRO_1[] PROGMEM = "credit @Spacehuhn";
 const char D_INTRO_2[] PROGMEM = DISPLAY_TEXT;
 const char D_RESETTING[] PROGMEM = "Resetting...";
-const char D_SCANNING_0[] PROGMEM = "loading..";
-const char D_SCANNING_1[] PROGMEM = "loading...";
-const char D_SCANNING_2[] PROGMEM = "loading....";
+const char D_SCANNING_0[] PROGMEM = "loading.";
+const char D_SCANNING_1[] PROGMEM = "loading..";
+const char D_SCANNING_2[] PROGMEM = "loading...";
 const char D_SCANNING_3[] PROGMEM = "loading....";
+const char D_SCANNING_4[] PROGMEM = "loading.....";
+const char D_SCANNING_5[] PROGMEM = "loading......";
+const char D_SCANNING_6[] PROGMEM = "loading.......";
+const char D_SCANNING_7[] PROGMEM = "loading........";
+const char D_SCANNING_8[] PROGMEM = "loading.........";
 
 struct MenuNode {
     std::function<String()>getStr; // function used to create the displayed string
@@ -103,10 +108,10 @@ class DisplayUI {
 
         const uint8_t maxLen           = 18;
         const uint8_t lineHeight       = 12;
-        const uint8_t buttonDelay      = 250;
-        const uint8_t drawInterval     = 100; // 100ms = 10 FPS
-        const uint16_t scrollSpeed     = 500; // time interval in ms
-        const uint16_t screenIntroTime = 2500;
+        const uint8_t buttonDelay      = 150;
+        const uint8_t drawInterval     = 125; // 100ms = 10 FPS
+        const uint16_t scrollSpeed     = 250; // time interval in ms
+        const uint16_t screenIntroTime = 1000;
         const uint16_t screenWidth     = 128;
         const uint16_t sreenHeight     = 64;
 

@@ -12,7 +12,7 @@ extern "C" {
 #include "SimpleList.h"
 #include "Accesspoints.h"
 
-#define SSID_LIST_SIZE 60
+#define SSID_LIST_SIZE 30
 
 
 extern uint32_t currentTime;
@@ -62,7 +62,7 @@ class SSIDs {
     private:
         bool changed            = false;
         bool randomMode         = false;
-        uint32_t randomInterval = 2000;
+        uint32_t randomInterval = 2500;
         uint32_t randomTime     = 0;
 
         struct SSID {

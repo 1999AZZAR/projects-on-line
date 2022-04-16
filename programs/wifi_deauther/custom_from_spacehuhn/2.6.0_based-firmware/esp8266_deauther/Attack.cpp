@@ -102,7 +102,7 @@ void Attack::updateCounter() {
     if (beacon.active) {
         beacon.maxPkts = ssids.count();
 
-        if (settings::getAttackSettings().beacon_interval == INTERVAL_100MS) beacon.maxPkts *= 10;
+        if (settings::getAttackSettings().beacon_interval == INTERVAL_100MS) beacon.maxPkts *= 4;
     } else {
         beacon.maxPkts = 0;
     }

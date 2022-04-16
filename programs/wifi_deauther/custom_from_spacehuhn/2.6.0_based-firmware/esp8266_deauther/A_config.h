@@ -6,50 +6,12 @@
 #define DEBUG_PORT Serial
 #define DEBUG_BAUD 115200
 
-// #define DEFAULT_ESP8266
-
-// #define NODEMCU
-// #define WEMOS_D1_MINI
-// #define DISPLAY_EXAMPLE_I2C
-// #define DISPLAY_EXAMPLE_SPI
-
-// #define MALTRONICS
-// #define DSTIKE_DEAUTHER_V1
-// #define DSTIKE_DEAUTHER_V2
-// #define DSTIKE_DEAUTHER_V3
-// #define DSTIKE_DEAUTHER_V3_5
-// #define DSTIKE_D_DUINO_B_V5_LED_RING
-// #define DSTIKE_DEAUTHER_BOY
-// #define DSTIKE_NODEMCU_07
-// #define DSTIKE_NODEMCU_07_V2
 #define DSTIKE_DEAUTHER_OLED
-// #define DSTIKE_DEAUTHER_OLED_V1_5_S
-// #define DSTIKE_DEAUTHER_OLED_V1_5
-// #define DSTIKE_DEAUTHER_OLED_V2
-// #define DSTIKE_DEAUTHER_OLED_V2_5
-// #define DSTIKE_DEAUTHER_OLED_V3
-// #define DSTIKE_DEAUTHER_OLED_V3_5
-// #define DSTIKE_DEAUTHER_OLED_V4
-// #define DSTIKE_DEAUTHER_OLED_V5
-// #define DSTIKE_DEAUTHER_OLED_V6
-// #define DSTIKE_DEAUTHER_MOSTER
-// #define DSTIKE_DEAUTHER_MOSTER_V2
-// #define DSTIKE_DEAUTHER_MOSTER_V3
-// #define DSTIKE_DEAUTHER_MOSTER_V4
-// #define DSTIKE_DEAUTHER_MOSTER_V5
-// #define DSTIKE_USB_DEAUTHER
-// #define DSTIKE_USB_DEAUTHER_V2
-// #define DSTIKE_DEAUTHER_WATCH
-// #define DSTIKE_DEAUTHER_WATCH_V2
-// #define DSTIKE_DEAUTHER_MINI
-// #define DSTIKE_DEAUTHER_MINI_EVO
-
-// #define LYASI_7W_E27_LAMP
-// #define AVATAR_5W_E14_LAMP
+// defined DEFAULT_ESP8266
 
 // Forces formatting of SPIFFS and EEPROM ot startup
 // #define FORMAT_SPIFFS
-// #define FORMAT_EEPROM
+#define FORMAT_EEPROM
 
 // Forces a reset of all settings at startup
 #define RESET_SETTINGS
@@ -58,133 +20,9 @@
 
 
 // https://github.com/SpacehuhnTech/esp8266_deauther/wiki/Setup-Display-&-Buttons#example-setup-with-i2c-oled
-#if defined(DISPLAY_EXAMPLE_I2C)
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-// #define SSD1306_I2C
-
-  #define I2C_ADDR 0x3C
-  #define I2C_SDA 5
-  #define I2C_SCL 4
-
-// #define FLIP_DIPLAY true
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 14
-  #define BUTTON_DOWN 12
-  #define BUTTON_A 13
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-// #define LED_NEOPIXEL_RGB
-
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 9
-  #define LED_MODE_BRIGHTNESS 10
 
 
-// https://github.com/SpacehuhnTech/esp8266_deauther/wiki/Setup-Display-&-Buttons#example-setup-with-spi-oled
-#elif defined(DISPLAY_EXAMPLE_SPI)
-
-  #define SH1106_SPI
-// #define SSD1306_SPI
-
-  #define SPI_RES 5
-  #define SPI_DC 4
-  #define SPI_CS 15
-
-// #define FLIP_DIPLAY true
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 0
-  #define BUTTON_DOWN 12
-  #define BUTTON_A 2
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-// #define LED_NEOPIXEL_RGB
-
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 9
-  #define LED_MODE_BRIGHTNESS 10
-
-#elif defined(MALTRONICS)
-
-// ===== Reset ====== //
-  #define RESET_BUTTON 5
-
-// ===== LED ===== //
-  #define LED_DOTSTAR
-  #define LED_NUM 1
-  #define LED_DOTSTAR_CLK 12
-  #define LED_DOTSTAR_DATA 13
-  #define LED_MODE_BRIGHTNESS 255
-
-// ===== Web ===== //
-#define WEB_IP_ADDR (192, 168, 4, 2)
-#define WEB_URL "deauther.tools"
-
-#elif defined(DSTIKE_D_DUINO_B_V5_LED_RING)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 12
-  #define LED_NEOPIXEL_PIN 15
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_DEAUTHER_BOY)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 10
-  #define BUTTON_DOWN 9
-  #define BUTTON_A 14
-  #define BUTTON_B 12
-
-#elif defined(DSTIKE_DEAUTHER_V3_5) || defined(DSTIKE_NODEMCU_07_V2)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-#elif defined(DSTIKE_DEAUTHER_OLED_V1_5_S)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_DEAUTHER_OLED) || defined(DSTIKE_DEAUTHER_OLED_V1_5)
+#if defined(DSTIKE_DEAUTHER_OLED) || defined(DSTIKE_DEAUTHER_OLED_V1_5)
 
 // ===== LED ===== //
 //  #define LED_DIGITAL
@@ -202,164 +40,20 @@
   #define BUTTON_DOWN 12
   #define BUTTON_A 13
 
-#elif defined(DSTIKE_DEAUTHER_OLED_V2) || defined(DSTIKE_DEAUTHER_OLED_V2_5)  || defined(DSTIKE_DEAUTHER_OLED_V3)
-
-// ===== LED ===== //
-  #define LED_DIGITAL
-
-  #define LED_PIN_R 16
-  #define LED_PIN_B 2
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_DEAUTHER_OLED_V3_5) || defined(DSTIKE_DEAUTHER_OLED_V4)  || defined(DSTIKE_DEAUTHER_OLED_V5)  || defined(DSTIKE_DEAUTHER_MOSTER)  || defined(DSTIKE_DEAUTHER_MOSTER_V2)  || defined(DSTIKE_DEAUTHER_MOSTER_V3)  || defined(DSTIKE_DEAUTHER_MOSTER_V4)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_DEAUTHER_OLED_V6) || defined(DSTIKE_DEAUTHER_MOSTER_V5)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-  #define HIGHLIGHT_LED 16
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-  #define RTC_DS3231
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_USB_DEAUTHER_V2)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 4
-
-#elif defined(DSTIKE_DEAUTHER_WATCH) || defined(DSTIKE_DEAUTHER_MINI)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-  #define HIGHLIGHT_LED 16
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(DSTIKE_DEAUTHER_WATCH_V2) || defined(DSTIKE_DEAUTHER_MINI_EVO)
-
-// ===== LED ===== //
-  #define LED_NEOPIXEL_GRB
-  #define LED_NUM 1
-  #define LED_NEOPIXEL_PIN 15
-
-  #define HIGHLIGHT_LED 16
-
-// ===== DISPLAY ===== //
-  #define SH1106_I2C
-  #define FLIP_DIPLAY true
-  #define DISPLAY_TEXT "Custom Hardware"
-
-  #define RTC_DS3231
-
-// ===== BUTTONS ===== //
-  #define BUTTON_UP 12
-  #define BUTTON_DOWN 13
-  #define BUTTON_A 14
-
-#elif defined(LYASI_7W_E27_LAMP)
-
-// ===== LED ===== //
- #define LED_MY92
-
- #define LED_MODE_OFF 0, 0, 0
- #define LED_MODE_SCAN 0, 0, 255
- #define LED_MODE_ATTACK 255, 0, 0
- #define LED_MODE_IDLE 0, 255, 0
- #define LED_MODE_BRIGHTNESS 10
-
- #define LED_NUM 1
- #define LED_MY92_DATA 4
- #define LED_MY92_CLK 5
- #define LED_MY92_CH_R 0
- #define LED_MY92_CH_G 1
- #define LED_MY92_CH_B 2
- #define LED_MY92_CH_BRIGHTNESS 3
- #define LED_MY92_MODEL MY92XX_MODEL_MY9291
-
-#elif defined(AVATAR_5W_E14_LAMP)
-
-// ===== LED ===== //
- #define LED_MY92
-
- #define LED_MODE_OFF 0, 0, 0
- #define LED_MODE_SCAN 0, 0, 255
- #define LED_MODE_ATTACK 255, 0, 0
- #define LED_MODE_IDLE 0, 255, 0
- #define LED_MODE_BRIGHTNESS 10
-
- #define LED_NUM 1
- #define LED_MY92_DATA 13
- #define LED_MY92_CLK 15
- #define LED_MY92_CH_R 0
- #define LED_MY92_CH_G 1
- #define LED_MY92_CH_B 2
- #define LED_MY92_CH_BRIGHTNESS 3
- #define LED_MY92_MODEL MY92XX_MODEL_MY9291
-
-#elif defined(DEFAULT_ESP8266) || defined(NODEMCU) || defined(WEMOS_D1_MINI) || defined(DSTIKE_USB_DEAUTHER) || defined(DSTIKE_NODEMCU_07) || defined(DSTIKE_DEAUTHER_V1) || defined(DSTIKE_DEAUTHER_V2) || defined(DSTIKE_DEAUTHER_V3)
+#elif defined(DEFAULT_ESP8266)
 // ===== LED ===== //
    #define LED_DIGITAL
    #define LED_PIN_R 16 // NodeMCU on-board LED
    #define LED_PIN_B 2  // ESP-12 LED
 
-#endif /* if defined(DEFAULT_ESP8266) || defined(NODEMCU) || defined(WEMOS_D1_MINI) || defined(DSTIKE_USB_DEAUTHER) || defined(DSTIKE_NODEMCU_07) || defined(DSTIKE_DEAUTHER) || defined(DSTIKE_DEAUTHER_V1) || defined(DSTIKE_DEAUTHER_V2) || defined(DSTIKE_DEAUTHER_V3) */
+#endif /* if defined(DEFAULT_ESP8266) */
 // ============================== //
-
 
 // ========= FALLBACK ========= //
 
 // ===== AUTOSAVE ===== //
 #ifndef AUTOSAVE_ENABLED
-  #define AUTOSAVE_ENABLED true
+  #define AUTOSAVE_ENABLED false
 #endif /* ifndef ATTACK_ALL_CH */
 
 #ifndef AUTOSAVE_TIME
@@ -372,7 +66,7 @@
 #endif /* ifndef ATTACK_ALL_CH */
 
 #ifndef RANDOM_TX
-  #define RANDOM_TX true
+  #define RANDOM_TX false
 #endif /* ifndef RANDOM_TX */
 
 #ifndef ATTACK_TIMEOUT
@@ -380,7 +74,7 @@
 #endif /* ifndef ATTACK_TIMEOUT */
 
 #ifndef DEAUTHS_PER_TARGET
-  #define DEAUTHS_PER_TARGET 25
+  #define DEAUTHS_PER_TARGET 20
 #endif /* ifndef DEAUTHS_PER_TARGET */
 
 #ifndef DEAUTH_REASON
@@ -502,7 +196,7 @@
 // =============== DISPLAY =============== //
 
 #ifndef DISPLAY_TIMEOUT
-  #define DISPLAY_TIMEOUT 3600
+  #define DISPLAY_TIMEOUT 1800
 #endif /* ifndef DISPLAY_TIMEOUT */
 
 #ifndef DISPLAY_TEXT
