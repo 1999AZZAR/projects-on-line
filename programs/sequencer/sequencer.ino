@@ -14,26 +14,26 @@ void setup() {
 }
 
 void loop() {
-
   sensorValue = analogRead(A0);
-  byte mappedValue = map(sensorValue, 0, 1024, 250, 2000) * 120;
+  deltime = map(sensorValue, 0, 1024, 1, 255) * 50;
 
   if (digitalRead(push) == HIGH) {
     digitalWrite(Relay1, LOW);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay2, LOW);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay3, LOW);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay4, LOW);
-  } else {
+  }
+
+  else {
     digitalWrite(Relay4, HIGH);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay3, HIGH);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay2, HIGH);
-    delay(mappedValue);
+    delay(deltime);
     digitalWrite(Relay1, HIGH);
   }
 }
-
