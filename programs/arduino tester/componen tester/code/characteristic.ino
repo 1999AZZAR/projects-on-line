@@ -407,51 +407,42 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
       if (PartReady == 1) {
         goto widmes;
       }
-
       // Test auf Thyristor:
       // Gate discharge
       ChargePin10ms(TriPinRL, 0); // Tristate-Pin (Gate) across R_L 10ms to GND
       adc.hp3 = W5msReadADC(HighPin); // read voltage at High-Pin (probably Anode) again
       // current should still flow, if not,
       // no Thyristor or holding current to low
-
       R_PORT = 0;     // switch R_L for High-Pin (probably Anode) to GND (turn off)
       wait_about5ms();
       R_PORT = HiPinRL;     // switch R_L for High-Pin (probably Anode) again to VCC
       adc.hp2 = W5msReadADC(HighPin); // measure voltage at the High-Pin (probably Anode) again
-
       if ((adc.hp3 < 1600) && (adc.hp2 > 4400)) {
         // if the holding current was switched off the thyristor must be switched off too.
         // if Thyristor was still swiched on, if gate was switched off => Thyristor
         PartFound = PART_THYRISTOR;
-
         // Test if Triac
         R_DDR = 0;
         R_PORT = 0;
         ADC_PORT = LoADCp;    // Low-Pin fix to VCC
         wait_about5ms();
-
         R_DDR = HiPinRL;    // switch R_L port HighPin to output (GND)
         if (W5msReadADC(HighPin) > 244) {
           goto savenresult;   // measure voltage at the  High-Pin (probably A2); if too high:
           // component has current => kein Triac
         }
-
         R_DDR = HiPinRL | TriPinRL; // switch R_L port for TristatePin (Gate) to output (GND) => Triac should be triggered
         if (W5msReadADC(TristatePin) < 977) {
           goto savenresult;     // measure voltage at the Tristate-Pin (probably Gate) ;
           // if to low, abort
         }
-
         if (ReadADC(HighPin) < 733) {
           goto savenresult;     // component has no current => no Triac => abort
         }
-
         R_DDR = HiPinRL;    // TristatePin (Gate) to input
         if (W5msReadADC(HighPin) < 733) {
           goto savenresult;     // component has no current without base current => no Triac => abort
         }
-
         R_PORT = HiPinRL;   // switch R_L port for HighPin to VCC => switch off holding current
         wait_about5ms();
         R_PORT = 0;     // switch R_L port for HighPin again to GND; Triac should now switched off
@@ -459,12 +450,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
           goto savenresult;   // measure voltage at the High-Pin (probably A2) ;
           // if to high, component is not switched off => no Triac, abort
         }
-
         PartFound = PART_TRIAC;
         PartReady = 1;
         goto savenresult;
       }
-
       // Test if NPN Transistor or MOSFET
       //ADC_DDR = LoADCm;   // Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH; // R_H port of Tristate-Pin (Basis) to output
@@ -472,7 +461,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
       wait_about50ms();
       adc.hp2 = ADCconfig.U_AVCC - ReadADC(HighPin);    // measure the voltage at the collector resistor
       adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);  // measure the voltage at the base resistor
-
 #if DebugOut == 5
       lcd_line3();
       lcd_clear_line();
@@ -485,32 +473,25 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
       lcd_data('P');
       lcd_string(utoa(adc.tp2, outval, 10));
 #endif
-
       if ((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
         PartReady = 1;    // check, if test is already done once
       }
-
 #ifdef COMMON_EMITTER
       trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.tp2 - ReadADC(LowPin);
-
       // compute current amplification factor for common Emitter
       // hFE = B = Collector current / Base current
       if (adc.tp2 < 53) {
-
 #if DebugOut == 5
         lcd_data('<');
         lcd_data('5');
         lcd_data('3');
 #endif
-
         adc.tp2 = 53;
       }
-
       tmp16 = adc.hp2;
       if (tmp16 > adc.lp_otr) {
         tmp16 -= adc.lp_otr;
       }
-
 #ifdef LONG_HFE
       trans.hfe[PartReady] = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) /
                               (unsigned int)RR680PL)) / (unsigned int)adc.tp2;
@@ -518,11 +499,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
       trans.hfe[PartReady] = ((tmp16 / ((RR680PL + 500) / 1000)) * (R_H_VAL / 500)) / (adc.tp2 / 500);
 #endif
 #endif
-
 #ifdef COMMON_COLLECTOR
       // compare current amplification factor for common Collector (Emitter follower)
       // hFE = (Emitterstrom - Basisstrom) / Basisstrom
-
 #ifdef COMMON_EMITTER
       if (c_hfe >  trans.hfe[PartReady]) {
 #endif
@@ -532,7 +511,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
       }
 #endif
 #endif
-
       if (adc.tp2 > 2557) {   // Basis-voltage R_H is low enough
         PartFound = PART_TRANSISTOR;  // NPN-Transistor is found (Base is near GND)
         PartMode = PART_MODE_NPN;
@@ -542,7 +520,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
           // (since D-Mode-FET will be detected in error as E-Mode )
           PartFound = PART_FET;   // N-Kanal-MOSFET is found (Basis/Gate will Not be pulled down)
           PartMode = PART_MODE_N_E_MOS;
-
 #if DebugOut == 5
           lcd_line3();
           lcd_clear_line();
@@ -551,16 +528,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
           lcd_data('F');
           wait_about1s();
 #endif
-
           // Switching of Drain is monitored with digital input
           // Low level is specified up to 0.3 * VCC
           // High level is specified above 0.6 * VCC
           PinMSK = HiADCm & 7;
-
           // measure Threshold voltage of Gate
           ADMUX = TristatePin | (1 << REFS0); // measure TristatePin, Ref. VCC
           gthvoltage = 1;     // round up ((1*4)/9)
-
           for (ii = 0; ii < 11; ii++) {
             wdt_reset();
             ChargePin10ms(TriPinRL, 0); // discharge Gate 10ms with RL
@@ -573,30 +547,24 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
             while (ADCSRA & (1 << ADSC)); // wait until ADC finished
             gthvoltage += ADCW;   // add result of ADC
           }
-
           gthvoltage *= 4;  // is equal to 44 * ADCW
           gthvoltage /= 9;  // scale to mV
         }
       }
-
 savenresult:
       trans.b = TristatePin;  // save Pin-constellation
       trans.c = HighPin;
       trans.e = LowPin;
     }  // end component conduct => npn
-
     ADC_DDR = TXD_MSK;    // switch all ADC-Ports to input
     ADC_PORT = TXD_VAL;   // switch all ADC-Ports to 0 (no Pull up)
-
     // Finish
     // end component has no connection between HighPin and LowPin
     goto widmes;
   }
-
   // component has current
   // Test if Diode
   ADC_PORT = TXD_VAL;
-
   for (ii = 0; ii < 200; ii++) {
     ADC_DDR = LoADCm | HiADCm;    // discharge by short of Low and High side
     wait_about5ms();              // Low and Highpin to GND for discharge
@@ -604,7 +572,6 @@ savenresult:
     adc.hp1 = ReadADC(HighPin);   // read voltage at High-Pin
     if (adc.hp1 < (150 / 8)) break;
   }
-
   /*
     It is possible, that wrong Parts are detected without discharging, because
     the gate of a MOSFET can be charged.
@@ -613,7 +580,6 @@ savenresult:
     A diode has a voltage, that is nearly independent from the current.
     The voltage of a resistor is proportional to the current.
   */
-
 #if 0
   // first check with higher current (R_L=680)
   // A diode is found better with a parallel mounted capacitor,
@@ -625,7 +591,6 @@ savenresult:
   R_DDR = HiPinRH;                // switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
   adc.hp2 = W5msReadADC(HighPin);     // M--|<--HP--R_H--VCC
-
   R_DDR = HiPinRL;                // switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
   ChargePin10ms(TriPinRL, 0);     // discharge for N-Kanal-MOSFET gate
@@ -633,7 +598,6 @@ savenresult:
   R_DDR = HiPinRH;                // switch R_H port for High-Pin to output (VCC)
   R_PORT = HiPinRH;
   adc.hp3 = W5msReadADC(HighPin);     // M--|<--HP--R_H--VCC
-
   if (adc.lp_otr > adc.hp1) {
     adc.hp1 = adc.lp_otr;   // the higher value wins
     adc.hp3 = adc.hp2;
@@ -648,27 +612,22 @@ savenresult:
   adc.hp2 = W5msReadADC(HighPin);   // M--|<--HP--R_H--VCC
   ChargePin10ms(TriPinRL, 0);   // discharge for N-Kanal-MOSFET gate
   adc.hp3 = W5msReadADC(HighPin); // M--|<--HP--R_H--VCC
-
   // check with higher current (R_L=680)
   R_DDR = HiPinRL;      // switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
   adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin);
   ChargePin10ms(TriPinRL, 1);   // discharge for N-Kanal-MOSFET gate
   adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
-
   R_DDR = HiPinRH;      // switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
-
   if (adc.lp_otr > adc.hp1) {
     adc.hp1 = adc.lp_otr;   // the higher value wins
     adc.hp3 = adc.hp2;
   } else {
     ChargePin10ms(TriPinRL, 0); // discharge for N-Kanal-MOSFET gate
   }
-
   adc.hp2 = W5msReadADC(HighPin);   // M--|<--HP--R_H--VCC
 #endif
-
 #if DebugOut == 4
   lcd_line3();
   lcd_clear_line();
@@ -688,7 +647,6 @@ savenresult:
   lcd_space();
   wait_about1s();
 #endif
-
   //if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
   if ((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3 + (adc.hp3 / 8))) && (adc.hp3 * 16 > adc.hp1)) {
     // voltage is above 0,15V and below 4,64V => Ok
@@ -699,42 +657,33 @@ savenresult:
       lcd_data('D');
 #endif
     }
-
     diodes[NumOfDiodes].Anode = HighPin;
     diodes[NumOfDiodes].Cathode = LowPin;
     diodes[NumOfDiodes].Voltage = adc.hp1;  // voltage in Millivolt
     NumOfDiodes++;
   }  // end voltage is above 0,15V and below 4,64V
-
 #if DebugOut == 4
   lcd_data(NumOfDiodes + '0');
 #endif
-
 widmes:
   if (NumOfDiodes > 0) goto clean_ports;
   // resistor measurement
   wdt_reset();
-
   // U_SCALE can be set to 4 for better resolution of ReadADC result
 #if U_SCALE != 1
   ADCconfig.U_AVCC *= U_SCALE;  // scale to higher resolution, mV scale is not required
   ADCconfig.U_Bandgap *= U_SCALE;
 #endif
-
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = R_ANZ_MESS; // switch to special number of repetitions
 #endif
-
 #define MAX_REPEAT (700 / (5 + R_ANZ_MESS/8))
-
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCm;   // switch Low-Pin to output (GND)
   R_DDR = HiPinRL;    // switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
-
 #if FLASHEND > 0x1fff
   adc.hp2 = 0;
-
   for (ii = 1; ii < MAX_REPEAT; ii++) {
     // wait until voltage is stable
     adc.tp1 = W5msReadADC(LowPin);    // low-voltage at Rx with load
@@ -745,24 +694,19 @@ widmes:
     adc.hp2 = adc.hp1;
     wdt_reset();
   }
-
   if (ii == MAX_REPEAT) goto testend;
 #else
   adc.tp1 = W5msReadADC(LowPin);  // low-voltage at Rx with load
   adc.hp1 = ReadADC(HighPin);   // voltage at resistor Rx with R_L
 #endif
-
   if (adc.tp1 > adc.hp1) {
     adc.tp1 = adc.hp1;
   }
-
   R_PORT = 0;
   R_DDR = HiPinRH;      // switch R_H port for High-Pin to output (GND)
   adc.hp2 = W5msReadADC(HighPin); // read voltage, should be down
-
   if (adc.hp2 > (20 * U_SCALE)) {
     // if resistor, voltage should be down
-
 #if DebugOut == 3
     lcd_line3();
     lcd_clear_line();
@@ -776,10 +720,8 @@ widmes:
     lcd_string(utoa(adc.hp2, outval, 10));
     lcd_space();
 #endif
-
     goto testend;
   }
-
   R_PORT = HiPinRH;     // switch R_H for High-Pin to VCC
   adc.hp2 = W5msReadADC(HighPin); // voltage at resistor Rx with R_H
 
@@ -787,10 +729,8 @@ widmes:
   ADC_PORT = HiADCp;      // switch High-Pin to VCC
   R_PORT = 0;
   R_DDR = LoPinRL;      // switch R_L for Low-Pin to GND
-
 #if FLASHEND > 0x1fff
   adc.lp2 = 0;
-
   for (ii = 1; ii < MAX_REPEAT; ii++) {
     // wait until voltage is stable
     adc.tp2 = W5msReadADC(HighPin); // high voltage with load
@@ -801,42 +741,33 @@ widmes:
     adc.lp2 = adc.lp1;
     wdt_reset();
   }
-
   if (ii == MAX_REPEAT) goto testend;
 #else
   adc.tp2 = W5msReadADC(HighPin); // high voltage with load
   adc.lp1 = ReadADC(LowPin);    // voltage at the other end of Rx
 #endif
-
   if (adc.tp2 < adc.lp1) {
     adc.tp2 = adc.lp1;
   }
-
   R_DDR = LoPinRH;      // switch R_H for Low-Pin to GND
   adc.lp2 = W5msReadADC(LowPin);
-
   if ((adc.hp1 < (4400 * U_SCALE)) && (adc.hp2 > (97 * U_SCALE))) {
     //voltage break down isn't insufficient
-
 #if DebugOut == 3
     lcd_data('F');
 #endif
-
     goto testend;
   }
-
   //if ((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
   if (adc.hp2 < (4972 * U_SCALE)) {
     // voltage breaks down with low test current and it is not nearly shorted  => resistor
     //if (adc.lp1 < 120) {    // take measurement with R_H
     if (adc.lp1 < (169 * U_SCALE)) {  // take measurement with R_H
       ii = 'H';
-
       if (adc.lp2 < (38 * U_SCALE)) {
         // measurement > 60MOhm to big resistance
         goto testend;
       }
-
       // two measurements with R_H resistors (470k) are made:
       // lirx1 (measurement at HighPin)
       lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / (ADCconfig.U_AVCC - adc.hp2);
@@ -844,13 +775,11 @@ widmes:
       lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)(ADCconfig.U_AVCC - adc.lp2) / adc.lp2;
 
 #define U_INT_LIMIT (990*U_SCALE)   // 1V switch limit in ReadADC for atmega family
-
 #ifdef __AVR_ATmega8__
 #define FAKT_LOW 2    // resolution is about twice as good
 #else
 #define FAKT_LOW 4    // resolution is about four times better
 #endif
-
 #ifdef AUTOSCALE_ADC
       if (adc.hp2 < U_INT_LIMIT) {
         lrx1 = (lirx1 * FAKT_LOW + lirx2) / (FAKT_LOW + 1); // weighted average of both R_H measurements
@@ -861,29 +790,22 @@ widmes:
       {
         lrx1 = (lirx1 + lirx2) / 2; // average of both R_H measurements
       }
-
       lrx1 *= 100;
       lrx1 += RH_OFFSET;    // add constant for correction of systematic error
-
     } else {
       ii = 'L';
       // two measurements with R_L resistors (680) are made:
       // lirx1 (measurement at HighPin)
-
       if (adc.tp1 > adc.hp1) {
         adc.hp1 = adc.tp1;    // diff negativ is illegal
       }
-
       lirx1 = (unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / (ADCconfig.U_AVCC - adc.hp1);
-
       if (adc.tp2 < adc.lp1) {
         adc.lp1 = adc.tp2;    // diff negativ is illegal
       }
-
       // lirx2 (Measurement at LowPin)
       lirx2 = (unsigned long)RR680MI * (unsigned long)(adc.tp2 - adc.lp1) / adc.lp1;
       //lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
-
 #ifdef AUTOSCALE_ADC
       if (adc.hp1 < U_INT_LIMIT) {
         lrx1 = (lirx1 * FAKT_LOW + lirx2) / (FAKT_LOW + 1); // weighted average of both R_L measurements
@@ -896,7 +818,6 @@ widmes:
       }
     }
     // lrx1  is tempory result
-
 #if 0
     // The zero resistance is in 0.01 Ohm units and usually so little, that correction for resistors above 10 Ohm
     // is not necassary
@@ -907,7 +828,6 @@ widmes:
       lrx1 = 0;
     }
 #endif
-
 #if DebugOut == 3
     lcd_line3();
     lcd_clear_line();
@@ -916,7 +836,6 @@ widmes:
     lcd_data(ii);
     lcd_testpin(HighPin);
     lcd_space();
-
     if (ii == 'H') {
       lcd_data('X');
       DisplayValue(lirx1, 1, LCD_CHAR_OMEGA, 4)
@@ -931,7 +850,6 @@ widmes:
       lcd_data('y');
       DisplayValue(lirx2, -1, LCD_CHAR_OMEGA, 4)
     }
-
     lcd_space();
     lcd_line4();
     lcd_clear_line();
@@ -940,17 +858,14 @@ widmes:
     lcd_space();
     lcd_line2();
 #endif
-
     if ((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
       for (ii = 0; ii < ResistorsFound; ii++) {
         // search measurements with inverse polarity
         thisR = &resis[ii];
         if (thisR->rt != TristatePin) continue;
-
         // must be measurement with inverse polarity
         // resolution is 0.1 Ohm, 1 Ohm = 10 !
         lirx1 = (labs((long)lrx1 - (long)thisR->rx) * 10) / (lrx1 + thisR->rx + 100);
-
         if (lirx1  > 0) {
 #if DebugOut == 3
           lcd_data('R');
@@ -961,51 +876,40 @@ widmes:
           DisplayValue(lirx1, -1, LCD_CHAR_OMEGA, 3)
           lcd_space();
 #endif
-
           goto testend;  // <10% mismatch
         }
-
         PartFound = PART_RESISTOR;
         goto testend;
       }  // end for
-
       // no same resistor with the same Tristate-Pin found, new one
       thisR = &resis[ResistorsFound]; // pointer to a free resistor structure
       thisR->rx = lrx1;     // save resistor value
-
 #if FLASHEND > 0x1fff
       thisR->lx = 0;      // no inductance
 #endif
-
       thisR->ra = LowPin;   // save Pin numbers
       thisR->rb = HighPin;
       thisR->rt = TristatePin;  // Tristate is saved for easier search of inverse measurement
       ResistorsFound++;   // 1 more resistor found
-
 #if DebugOut == 3
       lcd_data(ResistorsFound + '0');
       lcd_data('R');
 #endif
     }
   }
-
 testend:
-
 #if U_SCALE != 1
   ADCconfig.U_AVCC /= U_SCALE;  // scale back to mV resolution
   ADCconfig.U_Bandgap /= U_SCALE;
 #endif
-
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = ANZ_MESS; // switch back to standard number of repetition
 #endif
-
 #ifdef DebugOut
 #if DebugOut < 10
   wait_about2s();
 #endif
 #endif
-
 clean_ports:
 
   ADC_DDR = TXD_MSK;    // all ADC-Pins Input
